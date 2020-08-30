@@ -352,6 +352,7 @@ form .submitbutton:active {
     transform: scale(0.75, 0.75);
     overflow-x: hidden;
     margin: 0;
+    margin-top: -100px;
   }
 }
 
@@ -362,6 +363,7 @@ form .submitbutton:active {
     transform: scale(0.6, 0.6);
     overflow-x: hidden;
     margin: 0;
+    margin-top: -100px;
   }
 }
 
@@ -371,5 +373,6 @@ form .submitbutton:active {
     transform: scale(0.55, 0.55);
     overflow-x: hidden;
     margin: 0;
+    margin-top: -100px;
   }
 }
