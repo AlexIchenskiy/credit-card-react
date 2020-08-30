@@ -369,8 +369,9 @@ form .submitbutton:active {
 
 @media (max-width: 375px) {
   body {
-    width: 375px;
-    transform: scale(0.55, 0.55);
+    max-width: 375px;
+    min-width: 340px;
+    transform: scale(0.5, 0.5);
     overflow-x: hidden;
     margin: 0;
     margin-top: -100px;
