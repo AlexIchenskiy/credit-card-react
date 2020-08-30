@@ -3,6 +3,8 @@ body {
   min-height: 720px;
   overflow-y: hidden;
   background-color: #C9FCF0;
+  display: flex;
+  justify-content: center;
 }
 
 .root {
@@ -340,5 +342,34 @@ form .submitbutton:active {
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@media (max-width: 1280px) {
+  body {
+    min-width: 600px;
+    max-width: 1280px;
+    transform: scale(0.75, 0.75);
+    overflow-x: hidden;
+    margin: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    min-width: 375px;
+    max-width: 600px;
+    transform: scale(0.6, 0.6);
+    overflow-x: hidden;
+    margin: 0;
+  }
+}
+
+@media (max-width: 375px) {
+  body {
+    width: 375px;
+    transform: scale(0.55, 0.55);
+    overflow-x: hidden;
+    margin: 0;
   }
 }
