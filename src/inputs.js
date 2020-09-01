@@ -14,6 +14,7 @@ class TextInput extends React.Component {
 		this.state = {
 			value: '',
 			prev: 0,
+			focus: false,
 		}
 		this.handleChange = this.handleChange.bind(this);
 	}
@@ -52,13 +53,30 @@ class TextInput extends React.Component {
 				this.props.update(val);
 			}
 		}
-	}
+	};
+
+	toggleTransformInput = () => {
+		this.setState({focus: true,});
+		this.props.onFocus();
+		clearTimeout(this.timeOutId);
+	};
+
+	untoggleTransformInput = () => {
+		this.setState({focus: false,});
+		this.props.onBlur();
+		this.timeOutId = setTimeout(() => {
+		this.setState({
+			focus: false
+			});
+		});
+	};
 
 	render() {
 	return (
 		<div className = {[this.props.name, "couple"].join(" ")}>
 			<label for = {this.props.name}>{this.props.title}</label>
-			<input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autocomplete="off" onChange = {this.handleChange}/>
+			{this.props.name === 'cvc' ? <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autocomplete="off" onChange = {this.handleChange}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} /> :
+										 <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autocomplete="off" onChange = {this.handleChange} />}
 		</div>
 	);
 	}

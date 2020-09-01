@@ -7,43 +7,58 @@ import {TextInput, SelectInput} from './inputs.js';
 import {CardNumberChar, MonthChar, YearChar, NameChar} from './output.js';
 
 class Card extends React.Component {
-	render() {
+	render(){
 		return (
 			<div className = "card">
-				<div className = "wrapper"></div>
-				<div className = "cardimg">
-					<img className = "chip" src = {cardchip} alt = "chip" />
-					<img className = "logo" src = {visalogo} alt = "logo" />
-				</div>
-				<div className = "cardnumber">
-					<label for="cardnumber"  className = "numbertitle title"><span>Card number</span></label>
-					<label for="cardnumber" className = "numberchars">
-						<CardNumberChar name = "cardnumber" cardnumber = {this.props.cardnumber} />
-					</label>
-				</div>
-				<div className = "namedate">
-					<div className = "fullname">
-						<span className = "title">Cardholder name</span>
-						<span className = "subtitle letterswrap">
-							<label for="firstname" className = "letters" style = {{width: (this.props.fname.length*15 + 20)+'px'}}>
-								<NameChar name = "fname" sname = {this.props.fname}/>
-							</label> 
-							<label for="lastname" className = "letters" style = {{left: (this.props.fname.length*15 + 65)+'px', width: (this.props.lname.length*15+20)+'px'}}>
-								<NameChar name = "lname" sname = {this.props.lname}/>
+				<div className = "cardinner" style = {{transform: this.props.styles}}>
+					<div className = "front">
+						<div className = "wrapper"></div>
+						<div className = "cardimg">
+							<img className = "chip" src = {cardchip} alt = "chip" />
+							<img className = "logo" src = {visalogo} alt = "logo" />
+						</div>
+						<div className = "cardnumber">
+							<label for="cardnumber"  className = "numbertitle title"><span>Card number</span></label>
+							<label for="cardnumber" className = "numberchars">
+								<CardNumberChar name = "cardnumber" cardnumber = {this.props.cardnumber} />
 							</label>
-						</span>
+						</div>
+						<div className = "namedate">
+							<div className = "fullname">
+								<span className = "title">Cardholder name</span>
+								<span className = "subtitle letterswrap">
+									<label for="firstname" className = "letters" style = {{width: (this.props.fname.length*15 + 20)+'px'}}>
+										<NameChar name = "fname" sname = {this.props.fname}/>
+									</label> 
+									<label for="lastname" className = "letters" style = {{left: (this.props.fname.length*15 + 65)+'px', width: (this.props.lname.length*15+20)+'px'}}>
+										<NameChar name = "lname" sname = {this.props.lname}/>
+									</label>
+								</span>
+							</div>
+							<div className = "datecard">
+								<span className = "title">Expiration date</span>
+								<span className = "subtitle">
+									<label for="month" className = "datechars monthchars">
+										<MonthChar name = "month" month = {this.props.month} />
+									</label>
+									<span className = "datechars">/</span>
+									<label for="year" className = "datechars">
+										<YearChar name = "year" year = {this.props.year} />
+									</label>
+								</span>
+							</div>
+						</div>
 					</div>
-					<div className = "datecard">
-						<span className = "title">Expiration date</span>
-						<span className = "subtitle">
-							<label for="month" className = "datechars monthchars">
-								<MonthChar name = "month" month = {this.props.month} />
-							</label>
-							<span className = "datechars">/</span>
-							<label for="year" className = "datechars">
-								<YearChar name = "year" year = {this.props.year} />
-							</label>
-						</span>
+					<div className = "back">
+						<div className = "blackline"></div>
+						<div className = "cvc">
+							<div className = "signature"></div>
+							<div className = "cvcnumber"><NameChar name = "cvc" sname = {this.props.cvc}/></div>
+						</div>
+						<div className = "custnum">
+							<div className = "custserv title">Customer service number</div>
+							<div className = "custnumber subtitle">1-800-555-555</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -64,6 +79,9 @@ class Inputs extends React.Component {
 			prevmonth: 'MM',
 			cvc: '',
 		}
+
+		this.toggleTransformInput = this.toggleTransformInput.bind(this);
+		this.untoggleTransformInput = this.untoggleTransformInput.bind(this);
 	}
 
 	updateFNameInput = (fname) => {
@@ -124,6 +142,20 @@ class Inputs extends React.Component {
 		this.props.updatePrevMonth(prevmonth);
 	};
 
+	toggleTransformInput = () => {
+		this.props.toggleTransform();
+		clearTimeout(this.timeOutId);
+	};
+
+	untoggleTransformInput = () => {
+		this.props.untoggleTransform();
+		this.timeOutId = setTimeout(() => {
+		this.setState({
+			focus: false
+			});
+		});
+	};
+
 	render() {
 		return (
 			<div className = "inputs">
@@ -134,7 +166,7 @@ class Inputs extends React.Component {
 				    </div>
 				    <div className = "numbercvc">
 				    	<TextInput name = "cardnumber" title = "Card number" update = {this.updateNumberInput} />
-				    	<TextInput name = "cvc" title = "CVC" update = {this.updateCvcInput} />
+				    	<TextInput name = "cvc" title = "CVC" update = {this.updateCvcInput}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} />
 				    </div>
 				  	<div className = "date">
 						<SelectInput name="year" title = "Year" content = "years" updatePrev = {this.updatePrevYearInput} update = {this.updateYearInput} />
@@ -169,6 +201,7 @@ class App extends React.Component {
 			month: 'MM',
 			prevmonth: 'MM',
 			cvc: '',
+			styles: 'rotateY(0deg)',
 		}
 	}
 
@@ -222,6 +255,14 @@ class App extends React.Component {
 		this.setState({prevmonth: prevmonth,});
 	};
 
+	toggleTransform = () => {
+		this.setState({styles: 'rotateY(180deg)',});
+	};
+
+	untoggleTransform = () => {
+		this.setState({styles: 'rotateY(0deg)',});
+	};
+
 	render() {
 		return (
 			<div className = "root">
@@ -233,16 +274,19 @@ class App extends React.Component {
 					cvc        = {this.state.cvc}
 					year       = {[this.state.year, this.state.prevyear]}
 					month      = {[this.state.month, this.state.prevmonth]}
+					styles     = {this.state.styles}
 				/>
 				<Inputs
-					updateFName      = {this.updateFName}
-					updateLName      = {this.updateLName}
-					updateNumber     = {this.updateNumber}
-					updateCvc        = {this.updateCvc}
-					updateYear       = {this.updateYear}
-					updatePrevYear   = {this.updatePrevYear}
-					updateMonth      = {this.updateMonth}
-					updatePrevMonth  = {this.updatePrevMonth}
+					updateFName       = {this.updateFName}
+					updateLName       = {this.updateLName}
+					updateNumber      = {this.updateNumber}
+					updateCvc         = {this.updateCvc}
+					updateYear        = {this.updateYear}
+					updatePrevYear    = {this.updatePrevYear}
+					updateMonth       = {this.updateMonth}
+					updatePrevMonth   = {this.updatePrevMonth}
+					toggleTransform   = {this.toggleTransform}
+					untoggleTransform = {this.untoggleTransform}
 				/>
 			</div>
 		);

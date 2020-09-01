@@ -156,9 +156,9 @@ class NameChar extends React.Component {
 		let prev = this.state.nameitemsprev;
 		if (next !== prev) {
 			if (next.length === 0) {
-			this.props.name === 'fname' ? (next = 'Name') : (next = 'Surname');
+			this.props.name === 'fname' ? (next = 'Name') : (this.props.name === 'cvc' ? next = '   ' : next = 'Surname');
 		} else if (prev.length === 0) {
-			this.props.name === 'fname' ? (prev = 'Name') : (prev = 'Surname');
+			this.props.name === 'fname' ? (prev = 'Name') : (this.props.name === 'cvc' ? prev = '   ' : prev = 'Surname');
 		}
 		for (let i = 0; i < 9; i++) {
 			nameitemsarr.push([next[i] !== undefined ? next[i] : ' ', prev[i] !== undefined ? prev[i] : ' ']);
