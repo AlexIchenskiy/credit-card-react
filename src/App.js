@@ -18,8 +18,8 @@ class Card extends React.Component {
 							<img className = "logo" src = {visalogo} alt = "logo" />
 						</div>
 						<div className = "cardnumber">
-							<label for="cardnumber"  className = "numbertitle title"><span>Card number</span></label>
-							<label for="cardnumber" className = "numberchars">
+							<label htmlFor="cardnumber"  className = "numbertitle title"><span>Card number</span></label>
+							<label htmlFor="cardnumber" className = "numberchars">
 								<CardNumberChar name = "cardnumber" cardnumber = {this.props.cardnumber} />
 							</label>
 						</div>
@@ -27,10 +27,10 @@ class Card extends React.Component {
 							<div className = "fullname">
 								<span className = "title">Cardholder name</span>
 								<span className = "subtitle letterswrap">
-									<label for="firstname" className = "letters" style = {{width: (this.props.fname.length*15 + 20)+'px'}}>
+									<label htmlFor="firstname" className = "letters" style = {{width: (this.props.fname.length*15 + 20)+'px'}}>
 										<NameChar name = "fname" sname = {this.props.fname}/>
 									</label> 
-									<label for="lastname" className = "letters" style = {{left: (this.props.fname.length*15 + 65)+'px', width: (this.props.lname.length*15+20)+'px'}}>
+									<label htmlFor="lastname" className = "letters" style = {{left: (this.props.fname.length*15 + 65)+'px', width: (this.props.lname.length*15+20)+'px'}}>
 										<NameChar name = "lname" sname = {this.props.lname}/>
 									</label>
 								</span>
@@ -38,11 +38,11 @@ class Card extends React.Component {
 							<div className = "datecard">
 								<span className = "title">Expiration date</span>
 								<span className = "subtitle">
-									<label for="month" className = "datechars monthchars">
+									<label htmlFor="month" className = "datechars monthchars">
 										<MonthChar name = "month" month = {this.props.month} />
 									</label>
 									<span className = "datechars">/</span>
-									<label for="year" className = "datechars">
+									<label htmlFor="year" className = "datechars">
 										<YearChar name = "year" year = {this.props.year} />
 									</label>
 								</span>
@@ -78,10 +78,8 @@ class Inputs extends React.Component {
 			month: 'MM',
 			prevmonth: 'MM',
 			cvc: '',
+			disabled: 1,
 		}
-
-		this.toggleTransformInput = this.toggleTransformInput.bind(this);
-		this.untoggleTransformInput = this.untoggleTransformInput.bind(this);
 	}
 
 	updateFNameInput = (fname) => {
@@ -156,6 +154,26 @@ class Inputs extends React.Component {
 		});
 	};
 
+	componentDidUpdate = (prevProps, prevState) => {
+		if (this.state.fname.length > 1          &&
+		    this.state.fname !== 'Name'          &&
+			this.state.lname.length > 1          &&
+			this.state.lname !== 'Surname'       &&
+			!this.state.cardnumber.includes('#') &&
+			this.state.year !== 'YY'             &&
+			this.state.month !== 'MM'            &&
+			this.state.cvc.length === 3) {
+			if (prevState.disabled !== 0) {
+				this.setState({disabled: 0,});
+			}
+			
+		} else {
+			if (prevState.disabled !== 1) {
+				this.setState({disabled: 1,});
+			}
+		}
+	};
+
 	render() {
 		return (
 			<div className = "inputs">
@@ -172,7 +190,7 @@ class Inputs extends React.Component {
 						<SelectInput name="year" title = "Year" content = "years" updatePrev = {this.updatePrevYearInput} update = {this.updateYearInput} />
 						<SelectInput name="month" title = "Month" content = "months" updatePrev = {this.updatePrevMonthInput} update = {this.updateMonthInput} />
 					</div>
-				  <input type="submit" value="Submit" className = "submitbutton" onClick={e => {e.preventDefault();}} />
+				  <input type="submit" value="Submit" className = "submitbutton" onClick={e => {e.preventDefault();}} disabled = {this.state.disabled}/>
 				</form>
 			</div>
 		);

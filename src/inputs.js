@@ -74,9 +74,9 @@ class TextInput extends React.Component {
 	render() {
 	return (
 		<div className = {[this.props.name, "couple"].join(" ")}>
-			<label for = {this.props.name}>{this.props.title}</label>
-			{this.props.name === 'cvc' ? <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autocomplete="off" onChange = {this.handleChange}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} /> :
-										 <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autocomplete="off" onChange = {this.handleChange} />}
+			<label htmlFor = {this.props.name}>{this.props.title}</label>
+			{this.props.name === 'cvc' ? <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} /> :
+										 <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange} />}
 		</div>
 	);
 	}
@@ -96,8 +96,8 @@ class SelectInput extends React.Component {
 			}
 
 			this.state = {
-				content: [<option value="" selected disabled>Select {this.props.title.toLowerCase()}</option>].concat(years),
-				value: years[0],
+				content: [<option value="-1" key = "-1" disabled>Select {this.props.title.toLowerCase()}</option>].concat(years),
+				value: -1,
 				prev: 'YYYY',
 			}
 		} else {
@@ -111,8 +111,8 @@ class SelectInput extends React.Component {
 			}
 
 			this.state = {
-				content: [<option value="" selected disabled>Select {this.props.title.toLowerCase()}</option>].concat(months),
-				value: 1,
+				content: [<option value="-1" key = "-2" disabled>Select {this.props.title.toLowerCase()}</option>].concat(months),
+				value: -1,
 				prev: 'MM',
 			}
 		}
@@ -132,7 +132,7 @@ class SelectInput extends React.Component {
 	render() {
 		return (
 			<div className = {[this.props.name, "couple"].join(" ")}>
-				<label for={this.props.name}>{this.props.title}</label>
+				<label htmlFor={this.props.name}>{this.props.title}</label>
 				<select name={this.props.name} id={this.props.name} value={this.state.value} onChange={this.handleChange}>
 					{this.state.content}
 				</select>

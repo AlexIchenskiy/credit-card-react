@@ -392,7 +392,6 @@ form .submitbutton {
   display: flex;
   justify-content: center;
   font-size: 18px;
-  background-color: #C9FCF0;
   color: #323232;
   text-transform: uppercase;
   letter-spacing: 4px;
@@ -401,7 +400,15 @@ form .submitbutton {
   transform: scale(1, 1);
 }
 
-form .submitbutton:hover {
+form .submitbutton:enabled {
+  background-color: #70ffdd;
+}
+
+form .submitbutton:disabled {
+  background-color: #C9FCF0;
+}
+
+form .submitbutton:enabled:hover {
   transform: scale(1.03, 1.03);
 }
 
@@ -409,7 +416,7 @@ form .submitbutton:focus {
   outline: none;
 }
 
-form .submitbutton:active {
+form .submitbutton:enabled:active {
   outline: none;
   transform: scale(0.97, 0.97);
 }
