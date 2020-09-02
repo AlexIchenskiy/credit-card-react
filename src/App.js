@@ -12,7 +12,11 @@ class Card extends React.Component {
 			<div className = "card">
 				<div className = "cardinner" style = {{transform: this.props.styles}}>
 					<div className = "front">
-						<div className = "wrapper"></div>
+						<div className = {this.props.focus} 
+							 style = {this.props.focus === 'firstnamewrap wrap' ? {width: (this.props.fname.length*15 + 24)+'px'} : 
+							 		 (this.props.focus === 'lastnamewrap wrap' ? {left: (this.props.fname.length*15 + 52)+'px', width: (this.props.lname.length*15+28)+'px'} : 
+							 		  this.props.focus === 'monthwrap wrap' && this.props.month[0] !== 'MM' ? {width: 32+'px', left: 433+'px'} : 
+							 		 (this.props.focus === 'monthwrap wrap' ? {width: 45+'px'} : {}))}></div>
 						<div className = "cardimg">
 							<img className = "chip" src = {cardchip} alt = "chip" />
 							<img className = "logo" src = {visalogo} alt = "logo" />
@@ -79,6 +83,8 @@ class Inputs extends React.Component {
 			prevmonth: 'MM',
 			cvc: '',
 			disabled: 1,
+			focus: false,
+			focused: false,
 		}
 	}
 
@@ -154,12 +160,33 @@ class Inputs extends React.Component {
 		});
 	};
 
+	updateStyle = (classnm) => {
+		clearTimeout(this.timeOut);
+		this.props.updateFocus(classnm);
+	};
+
+	blurStyle = () => {
+		this.timeOut = setTimeout(() => {
+		this.setState({
+			focused: false
+			});
+		});
+	}
+
 	componentDidUpdate = (prevProps, prevState) => {
+		let check = false;
+		for (let i = 0; i < 19; i++) {
+			if (this.state.cardnumber[i].length === 2 && this.state.cardnumber[i][0] === "#") {
+				check = false;
+			} else {
+				check = true;
+			}
+		}
 		if (this.state.fname.length > 1          &&
 		    this.state.fname !== 'Name'          &&
 			this.state.lname.length > 1          &&
 			this.state.lname !== 'Surname'       &&
-			!this.state.cardnumber.includes('#') &&
+			check &&
 			this.state.year !== 'YY'             &&
 			this.state.month !== 'MM'            &&
 			this.state.cvc.length === 3) {
@@ -172,6 +199,9 @@ class Inputs extends React.Component {
 				this.setState({disabled: 1,});
 			}
 		}
+		if (document.activeElement.id == '') {
+			this.updateStyle('wrap wrapall');
+		}
 	};
 
 	render() {
@@ -179,16 +209,16 @@ class Inputs extends React.Component {
 			<div className = "inputs">
 				<form>
 					<div className = "flname">
-						<TextInput name = "firstname" title = "Name" update = {this.updateFNameInput} />
-						<TextInput name = "lastname" title = "Surname" update = {this.updateLNameInput} />
+						<TextInput name = "firstname" title = "Name" update = {this.updateFNameInput} updateFoc = {this.updateStyle} blur = {this.blurStyle} />
+						<TextInput name = "lastname" title = "Surname" update = {this.updateLNameInput} updateFoc = {this.updateStyle} blur = {this.blurStyle} />
 				    </div>
 				    <div className = "numbercvc">
-				    	<TextInput name = "cardnumber" title = "Card number" update = {this.updateNumberInput} />
-				    	<TextInput name = "cvc" title = "CVC" update = {this.updateCvcInput}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} />
+				    	<TextInput name = "cardnumber" title = "Card number" update = {this.updateNumberInput} updateFoc = {this.updateStyle} blur = {this.blurStyle} />
+				    	<TextInput name = "cvc" title = "CVC" update = {this.updateCvcInput}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} updateFoc = {this.updateStyle} />
 				    </div>
 				  	<div className = "date">
-						<SelectInput name="year" title = "Year" content = "years" updatePrev = {this.updatePrevYearInput} update = {this.updateYearInput} />
-						<SelectInput name="month" title = "Month" content = "months" updatePrev = {this.updatePrevMonthInput} update = {this.updateMonthInput} />
+						<SelectInput name="year" title = "Year" content = "years" updatePrev = {this.updatePrevYearInput} update = {this.updateYearInput} updateFoc = {this.updateStyle} blur = {this.blurStyle} />
+						<SelectInput name="month" title = "Month" content = "months" updatePrev = {this.updatePrevMonthInput} update = {this.updateMonthInput} updateFoc = {this.updateStyle} blur = {this.blurStyle} />
 					</div>
 				  <input type="submit" value="Submit" className = "submitbutton" onClick={e => {e.preventDefault();}} disabled = {this.state.disabled}/>
 				</form>
@@ -281,6 +311,12 @@ class App extends React.Component {
 		this.setState({styles: 'rotateY(0deg)',});
 	};
 
+	updateFocus = (classnm) => {
+		if (this.state.classnm !== classnm) {
+			this.setState({classnm: classnm,});
+		}
+	};
+
 	render() {
 		return (
 			<div className = "root">
@@ -293,6 +329,7 @@ class App extends React.Component {
 					year       = {[this.state.year, this.state.prevyear]}
 					month      = {[this.state.month, this.state.prevmonth]}
 					styles     = {this.state.styles}
+					focus      = {this.state.classnm}
 				/>
 				<Inputs
 					updateFName       = {this.updateFName}
@@ -305,6 +342,7 @@ class App extends React.Component {
 					updatePrevMonth   = {this.updatePrevMonth}
 					toggleTransform   = {this.toggleTransform}
 					untoggleTransform = {this.untoggleTransform}
+					updateFocus       = {this.updateFocus}
 				/>
 			</div>
 		);

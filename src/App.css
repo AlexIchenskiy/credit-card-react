@@ -119,8 +119,60 @@ body {
   align-items: flex-start; 
 }
 
-.wrapper {
+.wrap {
   position: absolute;
+  border-radius: 10px;
+  opacity: 0.4;
+  background-color: #000000;
+  border: 2px solid #ffffff;
+  display: none;
+  transition: 0.8s all;
+}
+
+.wrapall {
+  width: 100%;
+  height: 100%;
+  top: -5%;
+  left: 0;
+  display: block;
+  opacity: 0;
+}
+
+.firstnamewrap {
+  height: 25px;
+  left: 24px;
+  top: 237px;
+  display: block;
+}
+
+.lastnamewrap {
+  height: 25px;
+  top: 237px;
+  display: block;
+}
+
+.monthwrap {
+  height: 25px;
+  top: 237px;
+  left: 420px;
+  display: block;
+}
+
+.yearwrap {
+  height: 25px;
+  top: 237px;
+  left: 470px;
+  width: 30px;
+  display: block;
+}
+
+.cardnumberwrap {
+  opacity: 0.4;
+  height: 70px;
+  width: 95%;
+  top: 120px;
+  left: 13px;
+  display: block;
 }
 
 .card .cardimg {

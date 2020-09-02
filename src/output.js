@@ -23,7 +23,7 @@ class CardNumberChar extends React.Component {
 		}
 	}
 
-	handleChange = (nextProps) => {
+	handleChange = (nextProps, nextState) => {
 		let items = [];
 		nextProps.cardnumber.map(([x, y]) => {
 			items.push(
@@ -39,7 +39,7 @@ class CardNumberChar extends React.Component {
 				</span>
 			);
 		});
-		this.setState({items: items,})
+		this.setState({items: items,});
 	}
 
 	componentWillReceiveProps(nextProps) {

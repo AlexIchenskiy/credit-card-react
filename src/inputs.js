@@ -15,6 +15,7 @@ class TextInput extends React.Component {
 			value: '',
 			prev: 0,
 			focus: false,
+			classnm: 'wrap',
 		}
 		this.handleChange = this.handleChange.bind(this);
 	}
@@ -71,12 +72,21 @@ class TextInput extends React.Component {
 		});
 	};
 
+	updateClass = (nm) => {
+		this.props.updateFoc(this.props.name+'wrap wrap');
+	};
+
+	blurClass = () => {
+		this.props.blur();
+	}
+
 	render() {
+	let nm = "wrap"+this.props.name;
 	return (
 		<div className = {[this.props.name, "couple"].join(" ")}>
 			<label htmlFor = {this.props.name}>{this.props.title}</label>
-			{this.props.name === 'cvc' ? <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange}  onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} /> :
-										 <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange} />}
+			{this.props.name === 'cvc' ? <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange} onFocus = {this.toggleTransformInput} onBlur = {this.untoggleTransformInput} /> :
+										 <input type = "text" name = {this.props.name} id = {this.props.name} value = {this.state.value} autoComplete="off" onChange = {this.handleChange} onFocus = {this.updateClass} onBlur = {this.blurClass}/>}
 		</div>
 	);
 	}
@@ -120,6 +130,14 @@ class SelectInput extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 	}
 
+	updateClass = () => {
+		this.props.updateFoc(this.props.name+'wrap wrap');
+	};
+
+	blurClass = () => {
+		this.props.blur();
+	};
+
 	handleChange(event) {
 		if (event.target.value !== this.state.value) {
 			this.setState({value: event.target.value,});
@@ -133,7 +151,7 @@ class SelectInput extends React.Component {
 		return (
 			<div className = {[this.props.name, "couple"].join(" ")}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<select name={this.props.name} id={this.props.name} value={this.state.value} onChange={this.handleChange}>
+				<select name={this.props.name} id={this.props.name} value={this.state.value} onChange={this.handleChange} onFocus = {this.updateClass} onBlur = {this.blurClass}>
 					{this.state.content}
 				</select>
 			</div>
